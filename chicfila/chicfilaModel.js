@@ -8,24 +8,24 @@ module.exports = {
 	findById,
 };
 
-async function insert(hobbit) {
+async function insert(sandwich) {
 	return db("sandwiches")
 		.insert(sandwich, "id")
 		.then((ids) => ids[0]);
-}
+} // WORKING
 
 async function update(id, changes) {
 	return null;
 }
 
 function remove(id) {
-	return null;
-}
+	return db("sandwiches").where({ id }).del();
+} // WORKING
 
 function getAll() {
 	return db("sandwiches");
-}
+} // WORKING
 
 function findById(id) {
-	return null;
-}
+	return db("sandwiches").where({ id }).first();
+} // WORKING
