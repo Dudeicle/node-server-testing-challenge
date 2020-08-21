@@ -6,7 +6,7 @@ describe("chicfilaModel", () => {
 	beforeEach(async () => {
 		// empty table and reset primary key back to 1
 		await db("sandwiches").truncate();
-	});
+	}); // PASSING
 
 	// TESTING insert()
 	describe("insert()", () => {
@@ -23,7 +23,7 @@ describe("chicfilaModel", () => {
 
 			expect(sandwiches).toHaveLength(1);
 		});
-	});
+	}); // PASSING
 
 	// TESTING getAll()
 	describe("getAll()", () => {
@@ -33,7 +33,7 @@ describe("chicfilaModel", () => {
 			expect(allsams).toHaveLength(0);
 			// expect(allsams).toHaveLength(1); // intentional failure
 		});
-	});
+	}); // PASSING
 
 	// TESTING findById()
 	describe("findById()", () => {
@@ -51,7 +51,36 @@ describe("chicfilaModel", () => {
 			const allsamstwo = await db("sandwiches");
 			expect(allsamstwo).toHaveLength(1);
 
-			// step 4 delete the item just added and prove it has been deleted
+			// step 3 find the item by ID
+			expect(allsamstwo[0].id).toBe(1);
 		});
-	});
+	}); // PASSING
+
+	// TESTING remove()
+	describe("remove()", () => {
+		it("should delete a single sandwich by ID", async () => {
+			// step 1 show that the db is empty
+			const allsams = await db("sandwiches");
+			expect(allsams).toHaveLength(0);
+
+			// step 2 add an item to the database and prove it exists
+			await Sandwiches.insert({
+				name: "delete TEST Chicken Sandwich",
+				cost: 999.01,
+				calories: 1,
+			});
+			const allsamsthree = await db("sandwiches");
+			expect(allsamsthree).toHaveLength(1);
+
+			// step 3 delete the item just added and prove it has been deleted
+			const allsamsfour = await db("sandwiches");
+			expect(allsamsfour).toHaveLength(1);
+			const id = allsamsfour[0].id;
+			await Sandwiches.remove(id).del();
+
+			// step 4 prove that it was removed
+			const allsamsfive = await db("sandwiches");
+			expect(allsamsfive).toHaveLength(0);
+		});
+	}); // PASSING
 });
